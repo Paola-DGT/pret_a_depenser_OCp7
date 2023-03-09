@@ -1,0 +1,12 @@
+credentials:
+  usernames:
+    one name:
+      name: <a user name>
+      password: "hashed password" # Check streamlit documentation to find out how to hash the password
+    another name:
+      name: <another user name>
+      password: "another hashed password"
+cookie:
+  expiry_days: 1
+  key: "sldfmlkfoijadnmlqsvmlqjglkjgmlkjgmqlkjv" # whatever hash like value for the auth token
+  name: "dashboard_token"

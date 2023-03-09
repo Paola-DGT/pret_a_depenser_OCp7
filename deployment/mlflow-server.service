@@ -1,0 +1,21 @@
+[Unit]
+Description=Mlflow server for ML app
+After=network.target
+
+[Service]
+# the specific user that our service will run as
+User=outscale
+Group=outscale
+# another option for an even more restricted service is
+# DynamicUser=yes
+# see http://0pointer.net/blog/dynamic-users-with-systemd.html
+RuntimeDirectory=mlflow-server
+WorkingDirectory=/volume/
+ExecStart=/volume/mlflow-server-venv/bin/gunicorn -b 127.0.0.1:8968 -w 4 mlflow.server:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

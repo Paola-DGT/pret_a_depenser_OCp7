@@ -1,0 +1,56 @@
+# Ignore emacs backup and lock files
+*~
+\#*
+.\#*
+
+# Ignore Python compiled module
+__pycache__/
+*.py[cod]
+
+#Ignore Pycharm files
+.idea/
+
+# Ignore git version module
+git_extra.py
+
+# user configuration file
+.python-version
+
+#ignore env vars
+*.env
+
+# Distribution / packaging
+.Python
+node_modules/
+build/
+eggs/
+.eggs/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.iml
+
+#artefacts
+build/***
+/risk**
+dist
+
+# Ignore cache files
+*.cache/
+*.DS_Store
+.isort.cfg
+.reviewboardrc
+
+# Python virtualenv
+.virtualenv
+
+# Ignore py.test cache files
+**/.pytest_cache/*
+/.pytest_cache/
+.streamlit/secrets.toml
+/.streamlit/***

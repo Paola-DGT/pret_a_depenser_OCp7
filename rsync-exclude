@@ -1,0 +1,11 @@
+/.git**
+/.idea**
+/.pytest**
+tests/__pycache__/***
+app/__pycache__/***
+rsync-exclude
+build/***
+/risk**
+.pre-commit-config.yaml
+bandit.conf
+pylint.conf

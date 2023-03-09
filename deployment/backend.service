@@ -1,0 +1,22 @@
+[Unit]
+Description=gunicorn daemon for ML app
+After=network.target
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+User=outscale
+Group=outscale
+# another option for an even more restricted service is
+# DynamicUser=yes
+# see http://0pointer.net/blog/dynamic-users-with-systemd.html
+RuntimeDirectory=gunicorn
+WorkingDirectory=/volume/p7svr
+ExecStart=/volume/gunicorn-venv/bin/gunicorn --bind localhost:8080 prediction_server:app --worker-class uvicorn.workers.UvicornWorker --pythonpath /volume/p7svr/app/
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
