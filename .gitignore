@@ -48,6 +48,7 @@ dist
 
 # Python virtualenv
 .virtualenv
+venv/***
 
 # Ignore py.test cache files
 **/.pytest_cache/*

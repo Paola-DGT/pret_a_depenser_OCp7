@@ -1,11 +1,11 @@
 credentials:
   usernames:
-    one name:
-      name: <a user name>
-      password: "hashed password" # Check streamlit documentation to find out how to hash the password
-    another name:
-      name: <another user name>
-      password: "another hashed password"
+    paola:
+      name: "paola_diaz"
+      password: "$2b$12$opegMo0i5pmkHMMtZ6hPTuzjJdtPII8.4r.3Ur7a5WtxMsEMnZAuu"
+    openclassrooms:
+      name: "openclassrooms"
+      password: "$2b$12$gcFu4Fz9lmc6mT39IYkzguhp6DcFIq5TGJymwPVCU/66adowKVXoS"
 cookie:
   expiry_days: 1
   key: "sldfmlkfoijadnmlqsvmlqjglkjgmlkjgmqlkjv" # whatever hash like value for the auth token
