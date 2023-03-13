@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     """
 
     SERVER_APP_PATH: str = "/volume/p7svr"
-    LOGGED_MODEL: str = "app/models/PlainRegression_Model"
+    LOGGED_MODEL: str = "app/models/PlainRegression_Model"  # cambiar por modelo pao
     MLFLOW_URL: str = "http://localhost:8968"
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
     AUTH_FILE_PATH: str = "auth_config.yaml"

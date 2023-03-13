@@ -1,5 +1,7 @@
 """THis is the dashboard module of the risk prediction app."""
 
+import datetime
+
 import requests
 import streamlit as st
 import yaml
@@ -8,41 +10,42 @@ from streamlit_authenticator import Authenticate
 from app.settings import conf
 
 
+def get_yes_no_resp(text, key):
+    has_car = st.selectbox(f"{text}", ["yes", "no"], key=key)
+    return 1 if has_car == "yes" else 0
+
+
 def dashboard():
     """Main dashboard code"""
 
     st.text(
-        """Source: This dataset was taken from the StatLib library which is maintained
-        at Carnegie Mellon University.
-        The dataset was used in the 1983 American Statistical Association Exposition.
-    Data Set Information: This dataset is a slightly modified version of the dataset
-    provided in the StatLib library.
-        In line with the use by Ross Quinlan (1993) in predicting the attribute "mpg",
-        8 of the original instances were
-        removed because they had unknown values for the "mpg" attribute. The original
-        dataset is available in the file
-        "auto-mpg.data-original".
-    The data concerns city-cycle fuel consumption in miles per gallon, to be predicted
-    in terms of 3 multivalued
-    discrete and 5 continuous attributes." (Quinlan, 1993) """
+        """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins. Remplissez le questionnaire et
+        découvrez si vous pouvez bénéficier d'un prêt ou d'une aide financière."""
     )
 
     data = {
-        "cylinders": st.number_input("cylinders", min_value=1, max_value=16, value=8),
-        "displacement": st.number_input(
-            "displacement", min_value=150, max_value=1500, value=350
+        "index": st.number_input("index"),
+        "SK_ID_CURR": st.number_input("client"),
+        "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
+        "FLAG_OWN_REALTY": get_yes_no_resp(
+            "Did you have an appartement or a house", "has_house"
         ),
-        "horsepower": st.number_input(
-            "horsepower", min_value=45, max_value=900, value=165
+        "CNT_CHILDREN": st.number_input("childrens", min_value=0),
+        "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
+        "AMT_CREDIT_": st.number_input("Credit", min_value=10000),
+        "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
+        "DAYS_BIRTH": st.date_input("Birthday", datetime.date(2019, 10, 8)),
+        "ANNUITY_INCOME_PERC": st.number_input(
+            "Percentage of income", min_value=0, max_value=1
         ),
-        "weight": st.number_input("weight", min_value=2000, max_value=5000, value=3693),
-        "acceleration": st.number_input(
-            "acceleration", min_value=2.0, max_value=30.0, value=11.5
+        "DAYS_EMPLOYED_PERC": st.number_input(
+            "Percentage with a job", min_value=0, max_value=1
         ),
-        "model_year": st.number_input(
-            "model_year", min_value=10, max_value=99, value=70
+        "INCOME_CREDIT_PERC": st.number_input(
+            "Percentage credit/income", min_value=0, max_value=1
         ),
-        "origin": st.number_input("origin", min_value=1, max_value=5, value=1),
+        "PAYMENT_RATE": st.number_input("Payment rate", min_value=0, max_value=1),
+        "AMT_ANNUITY": st.number_input("Amount Annuity", min_value=0),
     }
 
     if st.button("Calculate"):
