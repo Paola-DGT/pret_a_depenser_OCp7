@@ -3,7 +3,6 @@ MlFlow server model prediction scheme.
 """
 # pylint: disable=no-name-in-module, too-few-public-methods
 
-import os
 from typing import Union
 
 import mlflow

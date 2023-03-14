@@ -11,6 +11,7 @@ from app.settings import conf
 
 
 def get_yes_no_resp(text, key):
+    """Change yes/no to boolean"""
     has_car = st.selectbox(f"{text}", ["yes", "no"], key=key)
     return 1 if has_car == "yes" else 0
 
@@ -19,8 +20,9 @@ def dashboard():
     """Main dashboard code"""
 
     st.text(
-        """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins. Remplissez le questionnaire et
-        découvrez si vous pouvez bénéficier d'un prêt ou d'une aide financière."""
+        """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins.
+        Remplissez le questionnaire et découvrez si vous pouvez bénéficier d'un prêt ou
+        d'une aide financière."""
     )
 
     data = {
@@ -32,7 +34,7 @@ def dashboard():
         "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
         "AMT_CREDIT": st.number_input("Credit", min_value=10000),
         "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
-        "DAYS_BIRTH": st.date_input("Birthday", datetime.date(2019, 10, 8)),
+        "DAYS_BIRTH": st.date_input("Birthday", datetime.date(2005, 1, 1)),
         "ANNUITY_INCOME_PERC": st.number_input(
             "Percentage of income", min_value=0, max_value=1
         ),
