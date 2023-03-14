@@ -24,15 +24,13 @@ def dashboard():
     )
 
     data = {
-        "index": st.number_input("index"),
-        "SK_ID_CURR": st.number_input("client"),
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
         "FLAG_OWN_REALTY": get_yes_no_resp(
             "Did you have an appartement or a house", "has_house"
         ),
         "CNT_CHILDREN": st.number_input("childrens", min_value=0),
         "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
-        "AMT_CREDIT_": st.number_input("Credit", min_value=10000),
+        "AMT_CREDIT": st.number_input("Credit", min_value=10000),
         "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
         "DAYS_BIRTH": st.date_input("Birthday", datetime.date(2019, 10, 8)),
         "ANNUITY_INCOME_PERC": st.number_input(

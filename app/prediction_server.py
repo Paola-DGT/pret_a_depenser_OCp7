@@ -45,13 +45,18 @@ class FormRequest(BaseModel):
     #     if not re.match(name):
     #         raise ValueError(f"{name} contains invalid characters")
     #     return name
-    cylinders: Union[float, int]
-    displacement: Union[float, int]
-    horsepower: Union[float, int]
-    weight: Union[float, int]
-    acceleration: Union[float, int]
-    model_year: Union[float, int]
-    origin: Union[float, int]
+    FLAG_OWN_CAR: bool
+    FLAG_OWN_REALTY: bool
+    CNT_CHILDREN: int
+    AMT_CREDIT: Union[float, int]
+    AMT_INCOME_TOTAL: Union[float, int]
+    EXT_SOURCE_1: Union[float, int]
+    DAYS_BIRTH: int
+    ANNUITY_INCOME_PERC: float
+    DAYS_EMPLOYED_PERC: float
+    INCOME_CREDIT_PERC: float
+    PAYMENT_RATE: float
+    AMT_ANNUITY: Union[float, int]
 
 
 def predict_risk(data: DataFrame):
@@ -59,9 +64,7 @@ def predict_risk(data: DataFrame):
     mlflow.set_tracking_uri(conf.MLFLOW_URL)
 
     # Load model as a PyFuncModel.
-    loaded_model = mlflow.pyfunc.load_model(
-        os.path.join(conf.SERVER_APP_PATH, conf.LOGGED_MODEL)
-    )
+    loaded_model = mlflow.pyfunc.load_model(conf.LOGGED_MODEL)
 
     # Predict on a Pandas DataFrame.
     try:
