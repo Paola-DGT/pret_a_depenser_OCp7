@@ -13,12 +13,14 @@ class Settings(BaseSettings):
 
     SERVER_APP_PATH: str = "/volume/p7svr"
     # cambiar por modelo pao
-    LOGGED_MODEL: str = "".join[
-        "/volume/mlruns/",
-        "868922548984611484/",
-        "db0a693ec2134778847c85d987023e95/",
-        "artifacts/model",
-    ]
+    LOGGED_MODEL: str = "".join(
+        [
+            "/volume/mlruns/",
+            "868922548984611484/",
+            "db0a693ec2134778847c85d987023e95/",
+            "artifacts/model",
+        ]
+    )
     MLFLOW_URL: str = "http://localhost:8968"
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
     AUTH_FILE_PATH: str = "auth_config.yaml"
