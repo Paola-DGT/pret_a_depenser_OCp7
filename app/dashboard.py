@@ -16,6 +16,19 @@ def get_yes_no_resp(text, key):
     return 1 if has_car == "yes" else 0
 
 
+def days_birth():
+    """Change birthday(date) to days(chiffre)"""
+    birth_date = st.date_input(
+        "Birthday",
+        value=datetime.date(2004, 1, 1),
+        min_value=datetime.date(1948, 1, 1),
+        max_value=datetime.date(2005, 1, 1),
+    )
+    current_day = datetime.datetime.now().date()
+    delta = current_day - birth_date
+    return delta.days
+
+
 def dashboard():
     """Main dashboard code"""
 
@@ -34,7 +47,7 @@ def dashboard():
         "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
         "AMT_CREDIT": st.number_input("Credit", min_value=10000),
         "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
-        "DAYS_BIRTH": st.date_input("Birthday", datetime.date(2005, 1, 1)),
+        "DAYS_BIRTH": days_birth(),
         "ANNUITY_INCOME_PERC": st.number_input(
             "Percentage of income", min_value=0, max_value=1
         ),
