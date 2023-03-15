@@ -16,27 +16,36 @@ def get_yes_no_resp(text, key):
     return 1 if has_car == "yes" else 0
 
 
-def days_birth():
-    """Change birthday(date) to days(chiffre)"""
-    birth_date = st.date_input(
-        "Birthday",
-        value=datetime.date(2004, 1, 1),
-        min_value=datetime.date(1948, 1, 1),
-        max_value=datetime.date(2005, 1, 1),
-    )
-    current_day = datetime.datetime.now().date()
-    delta = current_day - birth_date
-    return delta.days
+def work_percentage(days_b):
+    """Operation por obtenir le percentage"""
+    working_years = st.number_input("Years worked", value=1, min_value=1)
+    working_days = working_years * 365
+    percentage = days_b / working_days
+    return percentage
 
 
 def dashboard():
     """Main dashboard code"""
+
+    def days_birth():
+        """Change birthday(date) to days(chiffre)"""
+        birth_date = st.date_input(
+            "Birthday",
+            value=datetime.date(2004, 1, 1),
+            min_value=datetime.date(1948, 1, 1),
+            max_value=datetime.date(2005, 1, 1),
+        )
+        current_day = datetime.datetime.now().date()
+        delta = current_day - birth_date
+        return delta.days
 
     st.text(
         """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins.
         Remplissez le questionnaire et découvrez si vous pouvez bénéficier d'un prêt ou
         d'une aide financière."""
     )
+
+    days_birth = days_birth()
 
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
@@ -47,13 +56,11 @@ def dashboard():
         "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
         "AMT_CREDIT": st.number_input("Credit", min_value=10000),
         "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
-        "DAYS_BIRTH": days_birth(),
+        "DAYS_BIRTH": days_birth,
         "ANNUITY_INCOME_PERC": st.number_input(
             "Percentage of income", min_value=0, max_value=1
         ),
-        "DAYS_EMPLOYED_PERC": st.number_input(
-            "Percentage with a job", min_value=0, max_value=1
-        ),
+        "DAYS_EMPLOYED_PERC": work_percentage(days_birth),
         "INCOME_CREDIT_PERC": st.number_input(
             "Percentage credit/income", min_value=0, max_value=1
         ),
