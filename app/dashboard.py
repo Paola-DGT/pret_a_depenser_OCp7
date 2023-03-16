@@ -25,6 +25,7 @@ def work_percentage(days_b):
 
 
 def annuity_percentage():
+    """calcul annuity percentage"""
     amt_annuity = st.number_input("Credit annuity payment", min_value=1)
     amt_income_total = st.number_input("Yearly Income", min_value=1)
     annuity_percent = amt_annuity / amt_income_total
@@ -32,14 +33,10 @@ def annuity_percentage():
 
 
 def income_credit_percentage(amt_income_total):
+    """calcul income/credit percentage"""
     amt_credit = st.number_input("Credit Demand", min_value=1)
     income_credit = amt_income_total / amt_credit
     return amt_credit, income_credit
-
-
-def payment_rate(annuity, credit):
-    payment_rate = annuity / credit
-    return payment_rate
 
 
 def dashboard():
@@ -64,9 +61,8 @@ def dashboard():
     )
 
     days_b = days_birth()
-    AMT_ANNUITY, AMT_INCOME_TOTAL, ANNUITY_PERCENT = annuity_percentage()
-    AMT_CREDIT, INCOME_CREDIT = income_credit_percentage(AMT_INCOME_TOTAL)
-    PAYMENT_RATE = payment_rate(AMT_ANNUITY, AMT_CREDIT)
+    amt_annuity, amt_income_total, annuity_percent = annuity_percentage()
+    amt_credit, income_credit = income_credit_percentage(amt_income_total)
 
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
@@ -74,17 +70,17 @@ def dashboard():
             "Did you have an appartement or a house", "has_house"
         ),
         "CNT_CHILDREN": st.number_input("Number of Children", min_value=0),
-        "AMT_INCOME_TOTAL": AMT_INCOME_TOTAL,
-        "AMT_CREDIT": AMT_CREDIT,
+        "AMT_INCOME_TOTAL": amt_income_total,
+        "AMT_CREDIT": amt_credit,
         "EXT_SOURCE_1": st.number_input(
             "External Source", min_value=0.0, value=0.5059, max_value=1.0, format="%4f"
         ),
         "DAYS_BIRTH": days_b,
-        "ANNUITY_INCOME_PERC": ANNUITY_PERCENT,
+        "ANNUITY_INCOME_PERC": annuity_percent,
         "DAYS_EMPLOYED_PERC": work_percentage(days_b),
-        "INCOME_CREDIT_PERC": INCOME_CREDIT,
-        "PAYMENT_RATE": PAYMENT_RATE,
-        "AMT_ANNUITY": AMT_ANNUITY,
+        "INCOME_CREDIT_PERC": income_credit,
+        "PAYMENT_RATE": amt_annuity / amt_credit,
+        "AMT_ANNUITY": amt_annuity,
     }
 
     if st.button("Calculate"):
