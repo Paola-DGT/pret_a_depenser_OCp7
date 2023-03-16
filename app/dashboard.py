@@ -24,6 +24,24 @@ def work_percentage(days_b):
     return percentage
 
 
+def annuity_percentage():
+    amt_annuity = st.number_input("Credit annuity payment", min_value=1)
+    amt_income_total = st.number_input("Yearly Income", min_value=1)
+    annuity_percent = amt_annuity / amt_income_total
+    return amt_annuity, amt_income_total, annuity_percent
+
+
+def income_credit_percentage(amt_income_total):
+    amt_credit = st.number_input("Credit Demand", min_value=1)
+    income_credit = amt_income_total / amt_credit
+    return amt_credit, income_credit
+
+
+def payment_rate(annuity, credit):
+    payment_rate = annuity / credit
+    return payment_rate
+
+
 def dashboard():
     """Main dashboard code"""
 
@@ -39,41 +57,34 @@ def dashboard():
         delta = current_day - birth_date
         return delta.days
 
-    def annuity():
-        """Definition annuity"""
-
-    monthly_payment = st.number_input("Credit monthly payment", min_value=0)
-    annuity_payment = monthly_payment * 12
-    return annuity_payment
-
     st.text(
         """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins.
         Remplissez le questionnaire et découvrez si vous pouvez bénéficier d'un prêt ou
         d'une aide financière."""
     )
 
-    days_birth = days_birth()
-    payments = annuity()
+    days_b = days_birth()
+    AMT_ANNUITY, AMT_INCOME_TOTAL, ANNUITY_PERCENT = annuity_percentage()
+    AMT_CREDIT, INCOME_CREDIT = income_credit_percentage(AMT_INCOME_TOTAL)
+    PAYMENT_RATE = payment_rate(AMT_ANNUITY, AMT_CREDIT)
 
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
         "FLAG_OWN_REALTY": get_yes_no_resp(
             "Did you have an appartement or a house", "has_house"
         ),
-        "CNT_CHILDREN": st.number_input("childrens", min_value=0),
-        "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
-        "AMT_CREDIT": st.number_input("Credit", min_value=10000),
-        "EXT_SOURCE_1": st.number_input("External Source", min_value=0, value=None),
-        "DAYS_BIRTH": days_birth,
-        "ANNUITY_INCOME_PERC": st.number_input(
-            "Percentage of income", min_value=0, max_value=1
+        "CNT_CHILDREN": st.number_input("Number of Children", min_value=0),
+        "AMT_INCOME_TOTAL": AMT_INCOME_TOTAL,
+        "AMT_CREDIT": AMT_CREDIT,
+        "EXT_SOURCE_1": st.number_input(
+            "External Source", min_value=0.0, value=0.5059, max_value=1.0, format="%4f"
         ),
-        "DAYS_EMPLOYED_PERC": work_percentage(days_birth),
-        "INCOME_CREDIT_PERC": st.number_input(
-            "Percentage credit/income", min_value=0, max_value=1
-        ),
-        "PAYMENT_RATE": st.number_input("Payment rate", min_value=0, max_value=1),
-        "AMT_ANNUITY": payments,
+        "DAYS_BIRTH": days_b,
+        "ANNUITY_INCOME_PERC": ANNUITY_PERCENT,
+        "DAYS_EMPLOYED_PERC": work_percentage(days_b),
+        "INCOME_CREDIT_PERC": INCOME_CREDIT,
+        "PAYMENT_RATE": PAYMENT_RATE,
+        "AMT_ANNUITY": AMT_ANNUITY,
     }
 
     if st.button("Calculate"):
