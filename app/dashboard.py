@@ -39,6 +39,13 @@ def dashboard():
         delta = current_day - birth_date
         return delta.days
 
+    def annuity():
+        """Definition annuity"""
+
+    monthly_payment = st.number_input("Credit monthly payment", min_value=0)
+    annuity_payment = monthly_payment * 12
+    return annuity_payment
+
     st.text(
         """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins.
         Remplissez le questionnaire et découvrez si vous pouvez bénéficier d'un prêt ou
@@ -46,6 +53,7 @@ def dashboard():
     )
 
     days_birth = days_birth()
+    payments = annuity()
 
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
@@ -55,7 +63,7 @@ def dashboard():
         "CNT_CHILDREN": st.number_input("childrens", min_value=0),
         "AMT_INCOME_TOTAL": st.number_input("Income", min_value=10000),
         "AMT_CREDIT": st.number_input("Credit", min_value=10000),
-        "EXT_SOURCE_1": st.number_input("External Source", min_value=0),
+        "EXT_SOURCE_1": st.number_input("External Source", min_value=0, value=None),
         "DAYS_BIRTH": days_birth,
         "ANNUITY_INCOME_PERC": st.number_input(
             "Percentage of income", min_value=0, max_value=1
@@ -65,7 +73,7 @@ def dashboard():
             "Percentage credit/income", min_value=0, max_value=1
         ),
         "PAYMENT_RATE": st.number_input("Payment rate", min_value=0, max_value=1),
-        "AMT_ANNUITY": st.number_input("Amount Annuity", min_value=0),
+        "AMT_ANNUITY": payments,
     }
 
     if st.button("Calculate"):
