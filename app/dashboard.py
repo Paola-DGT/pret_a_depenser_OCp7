@@ -2,15 +2,17 @@
 
 import datetime
 import logging
+from logging.config import dictConfig
 
 import requests
 import streamlit as st
 import yaml
 from streamlit_authenticator import Authenticate
 
-from app.settings import conf
+from app.settings import conf, log_conf
 
-logger = logging.getLogger(__name__)
+dictConfig(log_conf.dict())
+logger = logging.getLogger("ml-app")
 
 
 def get_yes_no_resp(text, key):
@@ -87,7 +89,7 @@ def dashboard():
     }
 
     if st.button("Calculate"):
-        logger.info("Running : %s", data)
+        logger.info("Running_dashboard: %s", data)
         result = requests.request(
             method="POST",
             url=conf.PREDICTION_ENDPOINT,

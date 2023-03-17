@@ -4,6 +4,7 @@ MlFlow server model prediction scheme.
 # pylint: disable=no-name-in-module, too-few-public-methods
 
 import logging
+from logging.config import dictConfig
 from typing import Union
 
 import mlflow
@@ -12,10 +13,12 @@ from fastapi import FastAPI, HTTPException
 from pandas import DataFrame
 from pydantic import BaseModel
 
-from app.settings import conf
+from app.settings import conf, log_conf
 
-logger = logging.getLogger(__name__)
-app = FastAPI()
+dictConfig(log_conf.dict())
+logger = logging.getLogger("ml-app")
+
+app = FastAPI(debug=True)
 
 
 class FormRequest(BaseModel):
@@ -23,29 +26,6 @@ class FormRequest(BaseModel):
     that are difficult to be performed by streamlit.
     """
 
-    # name: str
-    # lastname: str
-    # age: int
-    # annual_income: int
-    # intended_credit: int
-    # marital_status: str
-    # number_of_children: Optional[int]
-
-    # @validator("age")
-    # # pylint: disable=no-self-argument
-    # def check_age(cls, age: int) -> int:
-    #     """Verifies thage of applicant."""
-    #     if 19 < age > 70:
-    #         raise ValueError("Age is off applicant accepted age policy")
-    #     return age
-    #
-    # @validator("name", "lastname")
-    # def check_name(cls, name: str) -> str:
-    #     """Verifies name and lastname are only alpha chars."""
-    #     re.compile(r"^[a-zA-Z]+$")
-    #     if not re.match(name):
-    #         raise ValueError(f"{name} contains invalid characters")
-    #     return name
     FLAG_OWN_CAR: bool
     FLAG_OWN_REALTY: bool
     CNT_CHILDREN: int

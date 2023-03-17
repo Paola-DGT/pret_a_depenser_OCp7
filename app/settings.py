@@ -13,17 +13,40 @@ class Settings(BaseSettings):
 
     SERVER_APP_PATH: str = "/volume/p7svr"
     # cambiar por modelo pao
-    LOGGED_MODEL: str = "".join(
-        [
-            "/volume/mlruns/",
-            "868922548984611484/",
-            "db0a693ec2134778847c85d987023e95/",
-            "artifacts/model",
-        ]
-    )
-    MLFLOW_URL: str = "http://localhost:8968"
+    LOGGED_MODEL: str = "runs:/f09bb80c562f42ee8dbe617c430da257/model"
+    MLFLOW_URL: str = "http://localhost:5000"
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
     AUTH_FILE_PATH: str = "auth_config.yaml"
 
 
+class LogConfig(BaseSettings):
+    """Logging configuration to be set for the server"""
+
+    LOGGER_NAME: str = "ml-app"
+    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
+    LOG_LEVEL: str = "INFO"
+
+    # Logging config
+    version = 1
+    disable_existing_loggers = False
+    formatters = {
+        "default": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    }
+    handlers = {
+        "default": {
+            "formatter": "default",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        },
+    }
+    loggers = {
+        LOGGER_NAME: {"handlers": ["default"], "level": LOG_LEVEL},
+    }
+
+
 conf = Settings()
+log_conf = LogConfig()
