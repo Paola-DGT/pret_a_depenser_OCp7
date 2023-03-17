@@ -5,7 +5,6 @@ MlFlow server model prediction scheme.
 
 import logging
 from logging.config import dictConfig
-from typing import Union
 
 import mlflow
 import pandas as pd
