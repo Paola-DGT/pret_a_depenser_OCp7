@@ -55,9 +55,9 @@ def dashboard():
         return delta.days
 
     st.text(
-        """Pret a depenser, vous offre un prêt clair, rapide et adapté à vos besoins.
-        Remplissez le questionnaire et découvrez si vous pouvez bénéficier d'un prêt ou
-        d'une aide financière."""
+        """Pret a depenser, offers you a clear, fast and adapted loan to your needs.
+        Fill in the questionnaire and find out if you can benefit from a loan or
+        financial aid."""
     )
 
     days_b = days_birth()
@@ -116,8 +116,8 @@ authentic = load_auth()
 
 
 #           PAGE STARTS HERE        #
-st.title("Simple Regresion Model")
-st.subheader("City-cycle fuel consumption in miles per gallon")
+st.title("Pret a Depenser")
+st.subheader("Credit application")
 
 # authentication banner
 name, authentication_status, username = authentic.login("Login", "main")
