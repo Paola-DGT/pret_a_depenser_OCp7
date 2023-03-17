@@ -26,18 +26,18 @@ class FormRequest(BaseModel):
     that are difficult to be performed by streamlit.
     """
 
-    FLAG_OWN_CAR: bool
-    FLAG_OWN_REALTY: bool
-    CNT_CHILDREN: int
-    AMT_CREDIT: Union[float, int]
-    AMT_INCOME_TOTAL: Union[float, int]
-    EXT_SOURCE_1: Union[float, int]
-    DAYS_BIRTH: int
+    FLAG_OWN_CAR: float
+    FLAG_OWN_REALTY: float
+    CNT_CHILDREN: float
+    AMT_CREDIT: float
+    AMT_INCOME_TOTAL: float
+    EXT_SOURCE_1: float
+    DAYS_BIRTH: float
     ANNUITY_INCOME_PERC: float
     DAYS_EMPLOYED_PERC: float
     INCOME_CREDIT_PERC: float
-    PAYMENT_RATE: Union[float, int]
-    AMT_ANNUITY: Union[float, int]
+    PAYMENT_RATE: float
+    AMT_ANNUITY: float
 
 
 def predict_risk(data: DataFrame):
