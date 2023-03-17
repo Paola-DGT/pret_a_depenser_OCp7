@@ -1,6 +1,7 @@
 """THis is the dashboard module of the risk prediction app."""
 
 import datetime
+import logging
 
 import requests
 import streamlit as st
@@ -8,6 +9,8 @@ import yaml
 from streamlit_authenticator import Authenticate
 
 from app.settings import conf
+
+logger = logging.getLogger(__name__)
 
 
 def get_yes_no_resp(text, key):
@@ -84,6 +87,7 @@ def dashboard():
     }
 
     if st.button("Calculate"):
+        logger.info("Running : %s", data)
         result = requests.request(
             method="POST",
             url=conf.PREDICTION_ENDPOINT,

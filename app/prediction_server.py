@@ -3,6 +3,7 @@ MlFlow server model prediction scheme.
 """
 # pylint: disable=no-name-in-module, too-few-public-methods
 
+import logging
 from typing import Union
 
 import mlflow
@@ -13,6 +14,7 @@ from pydantic import BaseModel
 
 from app.settings import conf
 
+logger = logging.getLogger(__name__)
 app = FastAPI()
 
 
@@ -54,7 +56,7 @@ class FormRequest(BaseModel):
     ANNUITY_INCOME_PERC: float
     DAYS_EMPLOYED_PERC: float
     INCOME_CREDIT_PERC: float
-    PAYMENT_RATE: float
+    PAYMENT_RATE: Union[float, int]
     AMT_ANNUITY: Union[float, int]
 
 
@@ -64,10 +66,14 @@ def predict_risk(data: DataFrame):
 
     # Load model as a PyFuncModel.
     loaded_model = mlflow.pyfunc.load_model(conf.LOGGED_MODEL)
+    logger.info("Running model: %s", loaded_model)
 
     # Predict on a Pandas DataFrame.
     try:
-        return loaded_model.predict(pd.DataFrame(data))
+        logger.info("Running predict function")
+        result = loaded_model.predict(pd.DataFrame(data))
+        logger.info("result: %s", result)
+        return result
     except Exception as exc:
         raise HTTPException(418, "Data provided is untreatable") from exc
 
@@ -75,5 +81,6 @@ def predict_risk(data: DataFrame):
 @app.post("/make_prediction")
 async def calculate_risk(form_request: FormRequest):
     """Prepares data from user and gets a prediction."""
+    logger.info("Running model with data: %s", form_request.dict())
     data = pd.DataFrame(form_request.dict(), index=[0])
     return predict_risk(data)[0]
