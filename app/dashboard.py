@@ -57,7 +57,7 @@ def dashboard():
         )
         current_day = datetime.datetime.now().date()
         delta = current_day - birth_date
-        return delta.days
+        return -delta.days
 
     st.text(
         """Pret a depenser, offers you a clear, fast and adapted loan to your needs.
