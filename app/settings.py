@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     SERVER_APP_PATH: str = "/volume/p7svr"
     # cambiar por modelo pao
-    LOGGED_MODEL: str = "runs:/f09bb80c562f42ee8dbe617c430da257/model"
+    LOGGED_MODEL: str = "runs:/f917d010e54b4d6f945322f931d3e160/model"
     MLFLOW_URL: str = "http://localhost:5000"
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
     AUTH_FILE_PATH: str = "auth_config.yaml"
