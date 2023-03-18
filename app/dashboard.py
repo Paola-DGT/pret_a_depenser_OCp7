@@ -18,7 +18,7 @@ logger = logging.getLogger("ml-app")
 def get_yes_no_resp(text, key):
     """Change yes/no to boolean"""
     has_car = st.selectbox(f"{text}", ["yes", "no"], key=key)
-    return 1 if has_car == "yes" else 0
+    return 0 if has_car == "yes" else 1
 
 
 def work_percentage(days_b):
