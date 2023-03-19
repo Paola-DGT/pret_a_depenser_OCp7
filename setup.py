@@ -12,12 +12,12 @@ setup(
     install_requires=[
         "fastapi",
         "gunicorn",
-        "mlflow",
         "pandas",
         "pydantic",
         "pytest",
         "starlette",
         "uvicorn",
+        "scikit-learn",
         "streamlit",
         "streamlit_authenticator",
         "watchdog",

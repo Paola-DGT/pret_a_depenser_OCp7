@@ -11,11 +11,8 @@ class Settings(BaseSettings):
     will look for the values on local environment variables.
     """
 
-    SERVER_APP_PATH: str = "/volume/p7svr"
-    # cambiar por modelo pao
-    LOGGED_MODEL: str = "runs:/f917d010e54b4d6f945322f931d3e160/model"
-    MLFLOW_URL: str = "http://localhost:5000"
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
+    TRAINING_ENDPOINT: str = "http://localhost:8080/train_model"
     AUTH_FILE_PATH: str = "auth_config.yaml"
 
 

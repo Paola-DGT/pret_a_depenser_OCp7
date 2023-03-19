@@ -5,14 +5,19 @@ MlFlow server model prediction scheme.
 
 import logging
 from logging.config import dictConfig
+from typing import TYPE_CHECKING, Union
 
-import mlflow
 import pandas as pd
+import sklearn.ensemble
 from fastapi import FastAPI, HTTPException
-from pandas import DataFrame
 from pydantic import BaseModel
 
-from app.settings import conf, log_conf
+import app.ml_tools as ml_tools
+from app.settings import log_conf
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
+    from sklearn.ensemble import RandomForestClassifier
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")
@@ -24,7 +29,7 @@ class FormRequest(BaseModel):
     """Representation of the data sent by the form with some checks
     that are difficult to be performed by streamlit.
     """
-
+    # TODO: Add "SK_ID_CURR" to this class and to the dashboard
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
     CNT_CHILDREN: float
@@ -39,20 +44,20 @@ class FormRequest(BaseModel):
     AMT_ANNUITY: float
 
 
+MODEL: Union[None, RandomForestClassifier] = None
+
+
 def predict_risk(data: DataFrame):
-    """Calls the mlflow prediction module with the given model."""
-    mlflow.set_tracking_uri(conf.MLFLOW_URL)
+    """Makes a prediction from the imputed data."""
+    global MODEL
 
-    # Load model as a PyFuncModel.
-    loaded_model = mlflow.pyfunc.load_model(conf.LOGGED_MODEL)
-    logger.info("Running model: %s", loaded_model)
+    if not MODEL:
+        MODEL = ml_tools.train_and_return()
 
-    # Predict on a Pandas DataFrame.
     try:
-        logger.info("Running predict function")
-        result = loaded_model.predict(pd.DataFrame(data))
-        logger.info("result: %s", result)
-        return result
+        logger.info(f"Running predict function with data: {data.to_dict()}")
+        prediction = MODEL.predict_proba(data)
+        return prediction
     except Exception as exc:
         raise HTTPException(418, "Data provided is untreatable") from exc
 
@@ -61,5 +66,7 @@ def predict_risk(data: DataFrame):
 async def calculate_risk(form_request: FormRequest):
     """Prepares data from user and gets a prediction."""
     logger.info("Running model with data: %s", form_request.dict())
+    # TODO: when "SK_ID_CURR" will be added you have to prepare_predict_data here
+    #   and pass it to the predict_risk
     data = pd.DataFrame(form_request.dict(), index=[0])
-    return predict_risk(data)[0]
+    return predict_risk(data) # TODO: check type and format of data returned
