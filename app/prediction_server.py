@@ -5,19 +5,13 @@ MlFlow server model prediction scheme.
 
 import logging
 from logging.config import dictConfig
-from typing import TYPE_CHECKING, Union
 
 import pandas as pd
-import sklearn.ensemble
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-import app.ml_tools as ml_tools
+from app import ml_tools
 from app.settings import log_conf
-
-if TYPE_CHECKING:
-    from pandas import DataFrame
-    from sklearn.ensemble import RandomForestClassifier
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")
@@ -29,6 +23,7 @@ class FormRequest(BaseModel):
     """Representation of the data sent by the form with some checks
     that are difficult to be performed by streamlit.
     """
+
     # TODO: Add "SK_ID_CURR" to this class and to the dashboard
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
@@ -44,10 +39,10 @@ class FormRequest(BaseModel):
     AMT_ANNUITY: float
 
 
-MODEL: Union[None, RandomForestClassifier] = None
+MODEL = None
 
 
-def predict_risk(data: DataFrame):
+def predict_risk(data: pd.DataFrame):
     """Makes a prediction from the imputed data."""
     global MODEL
 
@@ -55,7 +50,7 @@ def predict_risk(data: DataFrame):
         MODEL = ml_tools.train_and_return()
 
     try:
-        logger.info(f"Running predict function with data: {data.to_dict()}")
+        logger.info("Running predict function with data: %s", data.to_dict())
         prediction = MODEL.predict_proba(data)
         return prediction
     except Exception as exc:
@@ -69,4 +64,4 @@ async def calculate_risk(form_request: FormRequest):
     # TODO: when "SK_ID_CURR" will be added you have to prepare_predict_data here
     #   and pass it to the predict_risk
     data = pd.DataFrame(form_request.dict(), index=[0])
-    return predict_risk(data) # TODO: check type and format of data returned
+    return predict_risk(data)  # TODO: check type and format of data returned

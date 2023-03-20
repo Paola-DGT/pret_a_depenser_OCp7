@@ -1,17 +1,20 @@
 """This module contains all that is needed to preform model tasks."""
+import logging
 
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
+
+logger = logging.getLogger("ml-tools")
 
 
 def load_data() -> pd.DataFrame:
     """Reads the base features working file"""
     try:
         return pd.read_csv("data/features.csv", index_col="index")
-    except FileNotFoundError:
+    except FileNotFoundError as error:
+        logger.error("Cannot read features file, ERROR %s: ", error)
         raise
 
 
@@ -23,7 +26,7 @@ def prepare_train_data(data: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     train.drop(["SK_ID_CURR", "TARGET"], axis=1, inplace=True)
     train.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-    imp = SimpleImputer(missing_values=np.nan, strategy='median')
+    imp = SimpleImputer(missing_values=np.nan, strategy="median")
     imp.set_output(transform="pandas")
     imp.fit_transform(train)
 
@@ -35,7 +38,7 @@ def prepare_predict_data(data: dict) -> dict:
     # TODO: The input dictionary will contain unecessary columns that have to be
     #   stripped away to be able to use it. Add the dictionary cleanin here and
     #   return a clean dictionary.
-    ...
+    return data
 
 
 def train_model(data, target) -> RandomForestClassifier:
@@ -61,5 +64,6 @@ def train_and_return() -> RandomForestClassifier:
     train, target = prepare_train_data(data)
 
     return train_model(train, target)
+
 
 # TODO: Continue here, add functions to execute missing actions
