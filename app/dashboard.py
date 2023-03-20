@@ -25,7 +25,7 @@ def work_percentage(days_b):
     """Operation por obtenir le percentage"""
     working_years = st.number_input("Years worked", value=1, min_value=1)
     working_days = working_years * 365
-    percentage = days_b / working_days
+    percentage = abs(days_b) / working_days
     return percentage
 
 

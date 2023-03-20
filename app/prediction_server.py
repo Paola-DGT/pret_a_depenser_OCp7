@@ -28,15 +28,15 @@ class FormRequest(BaseModel):
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
     CNT_CHILDREN: float
-    AMT_CREDIT: float
     AMT_INCOME_TOTAL: float
+    AMT_CREDIT: float
+    AMT_ANNUITY: float
     EXT_SOURCE_1: float
     DAYS_BIRTH: float
     ANNUITY_INCOME_PERC: float
     DAYS_EMPLOYED_PERC: float
     INCOME_CREDIT_PERC: float
     PAYMENT_RATE: float
-    AMT_ANNUITY: float
 
 
 MODEL = None
@@ -50,11 +50,11 @@ def predict_risk(data: pd.DataFrame):
         MODEL = ml_tools.train_and_return()
 
     try:
-        logger.info("Running predict function with data: %s", data.to_dict())
+        logger.info("Running predict function with data: %s", data)
         prediction = MODEL.predict_proba(data)
         return prediction
-    except Exception as exc:
-        raise HTTPException(418, "Data provided is untreatable") from exc
+    except Exception as exception:
+        raise HTTPException(418, f"Failed to predict {exception}") from exception
 
 
 @app.post("/make_prediction")
