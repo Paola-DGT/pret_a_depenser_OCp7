@@ -32,14 +32,6 @@ def prepare_train_data(train: pd.DataFrame) -> pd.DataFrame:
     return train
 
 
-def prepare_predict_data(data: dict) -> dict:
-    """Prepares the input dict to be used in prediction"""
-    # TODO: The input dictionary will contain unecessary columns that have to be
-    #   stripped away to be able to use it. Add the dictionary cleanin here and
-    #   return a clean dictionary.
-    return data
-
-
 def train_model(data: pd.DataFrame, target: pd.DataFrame) -> RandomForestClassifier:
     """Trains a random forest model and returns it for further operations"""
     random_forest = RandomForestClassifier(n_estimators=5, random_state=150, n_jobs=-1)

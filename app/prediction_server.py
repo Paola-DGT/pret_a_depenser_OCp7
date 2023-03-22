@@ -24,7 +24,6 @@ class FormRequest(BaseModel):
     that are difficult to be performed by streamlit.
     """
 
-    # TODO: Add "SK_ID_CURR" to this class and to the dashboard
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
     CNT_CHILDREN: float
@@ -52,7 +51,7 @@ def predict_risk(data: pd.DataFrame):
     try:
         logger.info("Running predict function with data: %s", data)
         prediction = MODEL.predict_proba(data)
-        return prediction
+        return prediction[0][1]
     except Exception as exception:
         raise HTTPException(418, f"Failed to predict {exception}") from exception
 

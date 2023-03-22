@@ -69,6 +69,8 @@ def dashboard():
     amt_annuity, amt_income_total, annuity_percent = annuity_percentage()
     amt_credit, income_credit = income_credit_percentage(amt_income_total)
 
+    sk_id_curr: st.number_input("Client number", min_value=1000)
+
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
         "FLAG_OWN_REALTY": get_yes_no_resp(
