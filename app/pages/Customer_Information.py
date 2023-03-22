@@ -6,8 +6,6 @@ from logging.config import dictConfig
 
 import requests
 import streamlit as st
-import yaml
-from streamlit_authenticator import Authenticate
 
 from app.settings import conf, log_conf
 
@@ -64,12 +62,10 @@ def dashboard():
         Fill in the questionnaire and find out if you can benefit from a loan or
         financial aid."""
     )
-
+    sk_id_curr: st.number_input("Client number", min_value=1000)
     days_b = days_birth()
     amt_annuity, amt_income_total, annuity_percent = annuity_percentage()
     amt_credit, income_credit = income_credit_percentage(amt_income_total)
-
-    sk_id_curr: st.number_input("Client number", min_value=1000)
 
     data = {
         "FLAG_OWN_CAR": get_yes_no_resp("Did you have a car?", "has_car"),
@@ -104,38 +100,4 @@ def dashboard():
             st.success(f"Score = {result.content.decode()}")
 
 
-def load_auth() -> Authenticate:
-    """Loads authentication file and creates auth obj."""
-
-    with open(conf.AUTH_FILE_PATH, encoding="utf-8") as file:
-        config = yaml.load(file, Loader=yaml.SafeLoader)
-
-    authenticator = Authenticate(
-        config["credentials"],
-        config["cookie"]["name"],
-        config["cookie"]["key"],
-        config["cookie"]["expiry_days"],
-    )
-    return authenticator
-
-
-# Start authentication
-authentic = load_auth()
-
-
-#           PAGE STARTS HERE        #
-st.title("Pret a Depenser")
-st.subheader("Credit application")
-
-# authentication banner
-name, authentication_status, username = authentic.login("Login", "main")
-
-# if is authenticated we show the dashboard
-if authentication_status:
-    authentic.logout("Logout", "main")
-    st.write(f"Welcome *{name}*")
-    dashboard()
-elif authentication_status is False:
-    st.error("Username/password is incorrect")
-elif authentication_status is None:
-    st.warning("Please enter your username and password")
+dashboard()
