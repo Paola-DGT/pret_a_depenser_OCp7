@@ -11,3 +11,4 @@ st.subheader("Costumer Analysis")
 # st.plotly_chart("nombre graph".png)
 st.selectbox("Accepted", ["yes", "no"], key=key)
 st.button("save")
+...
