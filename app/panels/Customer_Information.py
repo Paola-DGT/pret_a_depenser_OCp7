@@ -12,6 +12,8 @@ from app.settings import conf, log_conf
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")
 
+st.title("Pret a Depenser")
+
 
 def get_yes_no_resp(text, key):
     """Change yes/no to boolean"""
@@ -86,6 +88,8 @@ def dashboard():
         "AMT_ANNUITY": amt_annuity,
     }
 
+    pred = None
+
     if st.button("Calculate"):
         logger.info("Running_dashboard: %s", data)
         result = requests.request(
@@ -98,6 +102,6 @@ def dashboard():
 
         if result.status_code == 200:
             st.success(f"Score = {result.content.decode()}")
+            pred = result.content.decode()
 
-
-dashboard()
+        return pred
