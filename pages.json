@@ -1,0 +1,26 @@
+{
+    "717ad0709a12f1cc86f7f9e328d98c8d": {
+        "page_script_hash": "717ad0709a12f1cc86f7f9e328d98c8d",
+        "page_name": "Start_page",
+        "icon": "",
+        "script_path": "/home/paola/Curso buspanita/proyecto_7_app/pret_a_depenser_OCp7/app/Start_page.py"
+    },
+    "569e44ef8b6294765b1c318bd0c83952": {
+        "page_script_hash": "569e44ef8b6294765b1c318bd0c83952",
+        "page_name": "Costumer_Analysis",
+        "icon": "",
+        "script_path": "/home/paola/Curso buspanita/proyecto_7_app/pret_a_depenser_OCp7/app/pages/Costumer_Analysis.py"
+    },
+    "0cbc29d24010f681279f57e683da8ca9": {
+        "page_script_hash": "0cbc29d24010f681279f57e683da8ca9",
+        "page_name": "Customer_Information",
+        "icon": "",
+        "script_path": "/home/paola/Curso buspanita/proyecto_7_app/pret_a_depenser_OCp7/app/pages/Customer_Information.py"
+    },
+    "2d25b0d0cc7f4691d840f4beb20a6330": {
+        "page_script_hash": "2d25b0d0cc7f4691d840f4beb20a6330",
+        "page_name": "Maintenance",
+        "icon": "",
+        "script_path": "/home/paola/Curso buspanita/proyecto_7_app/pret_a_depenser_OCp7/app/pages/Maintenance.py"
+    }
+}

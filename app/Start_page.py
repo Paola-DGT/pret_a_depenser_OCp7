@@ -38,7 +38,8 @@ def start():
     with cus_ana:
         from panels.Costumer_Analysis import customer_analysis
 
-        customer_analysis()
+        if prediction:
+            customer_analysis()
 
     # if st.button("Maintenance"):
     with maint:

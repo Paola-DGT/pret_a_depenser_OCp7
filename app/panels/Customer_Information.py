@@ -21,25 +21,45 @@ def get_yes_no_resp(text, key):
     return 0 if has_car == "yes" else 1
 
 
+CAP4_HELP = """Total years worked \n
+e.g: 2.5years (2years and 6 months)
+"""
+
+
 def work_percentage(days_b):
     """Operation por obtenir le percentage"""
-    working_years = st.number_input("Years worked", value=1, min_value=1)
+    working_years = st.number_input(
+        "Years worked", value=1, min_value=1, help=CAP4_HELP
+    )
     working_days = working_years * 365
     percentage = abs(days_b) / working_days
     return percentage
 
 
+CAP_HELP = """Annual paymentof the requested loan\n
+e.g.: 1500 (fifteen hundred)
+"""
+CAP2_HELP = """Annual salary\n
+e.g.: 35000(thirty-five thousand)
+"""
+
+
 def annuity_percentage():
     """calcul annuity percentage"""
-    amt_annuity = st.number_input("Credit annuity payment", min_value=1)
-    amt_income_total = st.number_input("Yearly Income", min_value=1)
+    amt_annuity = st.number_input("Credit annuity payment", min_value=1, help=CAP_HELP)
+    amt_income_total = st.number_input("Yearly Income", min_value=1, help=CAP2_HELP)
     annuity_percent = amt_annuity / amt_income_total
     return amt_annuity, amt_income_total, annuity_percent
 
 
+CAP3_HELP = """Amount of loan demanded\n
+e.g.:7000 (seven thousand)
+"""
+
+
 def income_credit_percentage(amt_income_total):
     """calcul income/credit percentage"""
-    amt_credit = st.number_input("Credit Demand", min_value=1)
+    amt_credit = st.number_input("Credit Demand", min_value=1, help=CAP2_HELP)
     income_credit = amt_income_total / amt_credit
     return amt_credit, income_credit
 
@@ -64,7 +84,9 @@ def dashboard():
         Fill in the questionnaire and find out if you can benefit from a loan or
         financial aid."""
     )
-    sk_id_curr: st.number_input("Client number", min_value=1000)
+
+    sk_id_curr = st.number_input("Client number", min_value=1000)
+
     days_b = days_birth()
     amt_annuity, amt_income_total, annuity_percent = annuity_percentage()
     amt_credit, income_credit = income_credit_percentage(amt_income_total)
@@ -78,7 +100,12 @@ def dashboard():
         "AMT_INCOME_TOTAL": amt_income_total,
         "AMT_CREDIT": amt_credit,
         "EXT_SOURCE_1": st.number_input(
-            "External Source", min_value=0.0, value=0.5059, max_value=1.0, format="%4f"
+            "External Source",
+            min_value=0.0,
+            value=0.5059,
+            max_value=1.0,
+            format="%4f",
+            help="score rating of confidence for the acquisition of credit",
         ),
         "DAYS_BIRTH": days_b,
         "ANNUITY_INCOME_PERC": annuity_percent,
