@@ -60,7 +60,5 @@ def predict_risk(data: pd.DataFrame):
 async def calculate_risk(form_request: FormRequest):
     """Prepares data from user and gets a prediction."""
     logger.info("Running model with data: %s", form_request.dict())
-    # TODO: when "SK_ID_CURR" will be added you have to prepare_predict_data here
-    #   and pass it to the predict_risk
     data = pd.DataFrame(form_request.dict(), index=[0])
     return predict_risk(data)  # TODO: check type and format of data returned
