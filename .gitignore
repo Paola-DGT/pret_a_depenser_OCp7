@@ -55,3 +55,4 @@ venv/***
 /.pytest_cache/
 .streamlit/secrets.toml
 /.streamlit/***
+!/plot_generation.ipynb

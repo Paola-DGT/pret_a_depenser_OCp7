@@ -5,7 +5,9 @@ MlFlow server model prediction scheme.
 
 import logging
 from logging.config import dictConfig
+from typing import TYPE_CHECKING, Optional
 
+import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -19,11 +21,12 @@ logger = logging.getLogger("ml-app")
 app = FastAPI(debug=True)
 
 
-class FormRequest(BaseModel):
+class Customer(BaseModel):
     """Representation of the data sent by the form with some checks
     that are difficult to be performed by streamlit.
     """
 
+    SK_ID_CURR: float
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
     CNT_CHILDREN: float
@@ -36,29 +39,96 @@ class FormRequest(BaseModel):
     DAYS_EMPLOYED_PERC: float
     INCOME_CREDIT_PERC: float
     PAYMENT_RATE: float
+    TARGET: Optional[float] = np.nan
+
+    def to_pandas(self):
+        return pd.DataFrame(self.dict(), index=[0])
 
 
 MODEL = None
+customer: Optional[Customer] = None
+
+
+def verify_model():
+    global MODEL
+    if not MODEL:
+        MODEL = ml_tools.train_and_return()
+    return MODEL
 
 
 def predict_risk(data: pd.DataFrame):
     """Makes a prediction from the imputed data."""
-    global MODEL
 
-    if not MODEL:
-        MODEL = ml_tools.train_and_return()
+    model = verify_model()
 
     try:
         logger.info("Running predict function with data: %s", data)
-        prediction = MODEL.predict_proba(data)
-        return prediction[0][1]
+        prediction = model.predict_proba(data)
+        return prediction
     except Exception as exception:
         raise HTTPException(418, f"Failed to predict {exception}") from exception
 
 
 @app.post("/make_prediction")
-async def calculate_risk(form_request: FormRequest):
+async def calculate_risk(form_request: Customer):
     """Prepares data from user and gets a prediction."""
-    logger.info("Running model with data: %s", form_request.dict())
-    data = pd.DataFrame(form_request.dict(), index=[0])
-    return predict_risk(data)  # TODO: check type and format of data returned
+    global customer
+    logger.info("Running model with data: %s", customer.dict())
+    customer = form_request
+    return predict_risk(customer.to_pandas())
+
+
+@app.post("/decision/{target}")
+async def save_customer(target: bool):
+    """Receives advisor decision and saves customer"""
+    global customer
+
+    if not customer:
+        raise HTTPException(400, "Cannot save if no prediction made")
+
+    customer.TARGET = target
+    try:
+        ml_tools.append_new_customer(customer)
+    except ValueError as error:
+        raise HTTPException(400, "Customer ID error") from error
+    logger.info("Customer saved , olk =;with data: %s", customer.dict())
+    return {"Status": "Customer was saved with current values"}
+
+
+@app.get("/get_feature_importance")
+async def get_feature_importance():
+    """Calculates and returns feature importance dataframe as json dict.
+
+    http response data should be reconverted to data frame with the function:
+    pd.read_json(data, orient='split')
+    """
+
+    features = [
+        "FLAG_OWN_CAR",
+        "FLAG_OWN_REALTY",
+        "CNT_CHILDREN",
+        "AMT_INCOME_TOTAL",
+        "AMT_CREDIT",
+        "AMT_ANNUITY",
+        "EXT_SOURCE_1",
+        "DAYS_BIRTH",
+        "ANNUITY_INCOME_PERC",
+        "DAYS_EMPLOYED_PERC",
+        "INCOME_CREDIT_PERC",
+        "PAYMENT_RATE",
+    ]
+    model = verify_model()
+    logger.info("Getting feature importances")
+    feature_importances = pd.DataFrame(
+        {"feature": features, "importance": model.feature_importances_}
+    )
+
+    return feature_importances.to_json(orient="split")
+
+
+@app.get("/get_customer/{customer_id}")
+async def get_customer(customer_id: int):
+    logger.info("Getting customer data")
+    data = ml_tools.get_customer(customer_id)
+    logger.info("Replying with customer data: %s", data)
+    return data

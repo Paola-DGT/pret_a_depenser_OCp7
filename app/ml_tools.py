@@ -7,6 +7,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 
+from app.prediction_server import Customer
+
 logger = logging.getLogger("ml-tools")
 
 
@@ -32,6 +34,12 @@ def prepare_train_data(train: pd.DataFrame) -> pd.DataFrame:
     return train
 
 
+def prepare_predict_data(customer: pd.DataFrame) -> pd.DataFrame:
+    """Prepares the input dict to be used in prediction"""
+    customer.drop(["SK_ID_CURR", "TARGET"], axis=1, inplace=True)
+    return customer
+
+
 def train_model(data: pd.DataFrame, target: pd.DataFrame) -> RandomForestClassifier:
     """Trains a random forest model and returns it for further operations"""
     random_forest = RandomForestClassifier(n_estimators=5, random_state=150, n_jobs=-1)
@@ -40,11 +48,23 @@ def train_model(data: pd.DataFrame, target: pd.DataFrame) -> RandomForestClassif
     return random_forest
 
 
-def append_new_customer():
+def append_new_customer(customer: Customer):
     """Appends the new customer to the existing dataset.
     The dictionary must have all the columns of the dataset.
     """
-    # TODO: Add logic to append customer
+    customer_df = customer.to_pandas()
+
+    train, _ = load_data()
+
+    if customer.SK_ID_CURR not in train.SK_ID_CURRENT.values:
+        raise ValueError("Customer ID not found")
+
+    customer_df[customer_df[customer_df.columns != "TARGET"]].to_csv(
+        "app/data/train.csv", index=False, header=False, index_label=False, mode="a"
+    )
+    customer_df[customer_df[customer_df.columns == "TARGET"]].to_csv(
+        "app/data/labels.csv", index=False, header=False, index_label=False, mode="a"
+    )
 
 
 def train_and_return() -> RandomForestClassifier:
@@ -55,4 +75,9 @@ def train_and_return() -> RandomForestClassifier:
     return train_model(train, target)
 
 
-# TODO: Continue here, add functions to execute missing actions
+def get_customer(customer_id: int):
+    """Gets à customer from SK_ID_CURR identification."""
+    train, target = load_data()
+    train["TARGET"] = target.values
+    customer_data = train[train.SK_ID_CURR == customer_id]
+    return customer_data.to_json(orient="split")
