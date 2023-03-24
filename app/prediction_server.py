@@ -60,11 +60,14 @@ def predict_risk(data: pd.DataFrame):
     """Makes a prediction from the imputed data."""
 
     model = verify_model()
+    data = ml_tools.prepare_predict_data(data)
 
     try:
         logger.info("Running predict function with data: %s", data)
         prediction = model.predict_proba(data)
-        return prediction
+
+        return prediction[0][1]
+
     except Exception as exception:
         raise HTTPException(418, f"Failed to predict {exception}") from exception
 
@@ -73,8 +76,8 @@ def predict_risk(data: pd.DataFrame):
 async def calculate_risk(form_request: Customer):
     """Prepares data from user and gets a prediction."""
     global customer
-    logger.info("Running model with data: %s", customer.dict())
     customer = form_request
+    logger.info("Running model with data: %s", customer.dict())
     return predict_risk(customer.to_pandas())
 
 

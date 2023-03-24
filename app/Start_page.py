@@ -1,21 +1,16 @@
-import json
+"""Dashboard start page to handle sub pages"""
+
 import logging
 from logging.config import dictConfig
-from pathlib import Path
 
-import numpy as np
-import pandas as pd
-import requests
 import streamlit as st
 import yaml
-from streamlit.components.v1 import html
-from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_authenticator import Authenticate
 
 from app.settings import conf, log_conf
 
 dictConfig(log_conf.dict())
-logger = logging.getLogger("ml-app")
+logger = logging.getLogger("front-app")
 
 
 def start():
@@ -25,27 +20,19 @@ def start():
     financial aid."""
     )
 
-    cus_inf, cus_ana, maint = st.tabs(
-        ["Customer Information", "Customer Analysis", "Maintenance"]
-    )
+    cus_inf, cus_ana = st.tabs(["Customer Information", "Customer Analysis"])
 
     # if st.button("Customer Info"):
     with cus_inf:
         from panels.Customer_Information import dashboard
 
-        prediction = dashboard()
+        prediction, customer = dashboard() or (None, None)
 
     with cus_ana:
         from panels.Costumer_Analysis import customer_analysis
 
         if prediction:
-            customer_analysis()
-
-    # if st.button("Maintenance"):
-    with maint:
-        from panels.Maintenance import maintenance
-
-        maintenance()
+            customer_analysis(prediction, customer)
 
 
 def load_auth() -> Authenticate:
