@@ -23,6 +23,12 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
         raise
 
 
+def load_and_concatenate_data() -> pd.DataFrame:
+    train, target = load_data()
+    train["TARGET"] = target.values
+    return train
+
+
 def prepare_train_data(train: pd.DataFrame) -> pd.DataFrame:
     """Prepares data for training the model."""
     train.drop(["SK_ID_CURR"], axis=1, inplace=True)
@@ -77,7 +83,23 @@ def train_and_return() -> RandomForestClassifier:
 
 def get_customer(customer_id: int):
     """Gets à customer from SK_ID_CURR identification."""
-    train, target = load_data()
-    train["TARGET"] = target.values
+    train = load_and_concatenate_data()
     customer_data = train[train.SK_ID_CURR == customer_id]
     return customer_data.to_json(orient="split")
+
+
+def get_general_data_description():
+    data = load_and_concatenate_data()
+    cols_to_count = ["FLAG_OWN_CAR", "FLAG_OWN_REALTY", "CNT_CHILDREN"]
+    all_approved = data[data.TARGET == 1]
+    all_app_big = all_approved.drop(
+        cols_to_count + ["SK_ID_CURR", "TARGET"], axis=1
+    ).describe()
+    all_app_big = all_app_big.drop(["count", "std", "25%", "50%", "75%"], axis=0)
+    all_app_perc = all_approved[cols_to_count]
+    concatenated_count = []
+    for column in all_app_perc.columns:
+        concat = all_app_perc.groupby([column])[column].count().to_json(orient="split")
+        concatenated_count.append(concat)
+
+    return [all_app_big.to_json(orient="split"), concatenated_count]

@@ -129,6 +129,15 @@ async def get_feature_importance():
     return feature_importances.to_json(orient="split")
 
 
+@app.get("/get_accepted_description")
+async def get_accepted_description():
+    if not customer:
+        raise HTTPException(
+            400, "Customer data is not available yet, make a prediction first."
+        )
+    return ml_tools.get_general_data_description()
+
+
 @app.get("/get_customer/{customer_id}")
 async def get_customer(customer_id: int):
     logger.info("Getting customer data")

@@ -12,6 +12,10 @@ from app.settings import conf, log_conf
 dictConfig(log_conf.dict())
 logger = logging.getLogger("front-app")
 
+ca_flag = False
+prediction = None
+customer = None
+
 
 def start():
     st.text(
@@ -26,12 +30,16 @@ def start():
     with cus_inf:
         from panels.Customer_Information import dashboard
 
+        global prediction, customer
         prediction, customer = dashboard() or (None, None)
+
+        global ca_flag
+        ca_flag = True if prediction is not None else False
 
     with cus_ana:
         from panels.Costumer_Analysis import customer_analysis
 
-        if prediction:
+        if ca_flag:
             customer_analysis(prediction, customer)
 
 

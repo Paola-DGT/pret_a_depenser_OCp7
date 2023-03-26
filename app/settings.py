@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     PREDICTION_ENDPOINT: str = "http://localhost:8080/make_prediction"
     GET_FI_ENDPOINT: str = "http://localhost:8080/get_feature_importance"
     GET_CUSTOMER: str = "http://localhost:8080/get_customer"
+    GET_ACCEPTED_DESC_ENDPOINT: str = "http://localhost:8080/get_accepted_description"
     TRAINING_ENDPOINT: str = "http://localhost:8080/train_model"
     SAVE_DECISION_ENDPOINT: str = "http://localhost:8080/decision"
     AUTH_FILE_PATH: str = "auth_config.yaml"

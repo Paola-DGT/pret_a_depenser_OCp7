@@ -22,5 +22,6 @@ setup(
         "streamlit_authenticator",
         "watchdog",
         "pyyaml",
+        "plotly",
     ],
 )
