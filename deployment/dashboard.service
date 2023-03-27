@@ -12,7 +12,7 @@ Group=outscale
 # see http://0pointer.net/blog/dynamic-users-with-systemd.html
 RuntimeDirectory=streamlit
 WorkingDirectory=/volume/p7svr
-ExecStart=/volume/streamlit-venv/bin/streamlit run /volume/p7svr/app/dashboard.py --server.address="localhost" --server.port 8085
+ExecStart=/volume/streamlit-venv/bin/streamlit run /volume/p7svr/app/start_page.py --server.address="localhost" --server.port 8085
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
