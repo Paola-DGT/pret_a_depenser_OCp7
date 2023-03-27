@@ -1,8 +1,7 @@
 """This is the prediction server that will prepare the request for the
 MlFlow server model prediction scheme.
 """
-from __future__ import annotations
-
+# pylint: disable=no-name-in-module, too-few-public-methods, R0801
 import logging
 from logging.config import dictConfig
 from typing import Optional
@@ -15,9 +14,6 @@ from sklearn.ensemble import RandomForestClassifier
 
 from app import ml_tools
 from app.settings import log_conf
-
-# pylint: disable=no-name-in-module, too-few-public-methods, R0801
-
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")

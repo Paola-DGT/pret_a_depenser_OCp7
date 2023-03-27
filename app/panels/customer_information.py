@@ -1,9 +1,9 @@
 """This is the dashboard customer form module, contains all the fields necessary
 to obtain a risk prediction.
 """
+# pylint: disable=R0801
 from __future__ import annotations
 
-# pylint: disable=R0801
 import datetime
 import json
 import logging
@@ -114,7 +114,7 @@ def days_birth() -> int:
     return -delta.days
 
 
-# pylint: disable=inconsistent-return-statements
+# pylint: disable=inconsistent-return-statements, too-many-locals
 def dashboard() -> tuple[Optional[float], Customer]:
     """Main dashboard code."""
 

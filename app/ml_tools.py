@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Tuple, Type
+from typing import TYPE_CHECKING, Tuple
 
 import numpy as np
 import pandas as pd
@@ -58,7 +58,7 @@ def train_model(data: pd.DataFrame, target: pd.DataFrame) -> RandomForestClassif
     return random_forest
 
 
-def append_new_customer(customer: Customer):  # pylint: disable=used-before-assignment
+def append_new_customer(customer: Customer):
     """Appends the new customer to the existing dataset.
     The dictionary must have all the columns of the dataset.
     """
