@@ -1,13 +1,14 @@
 """This module contains all that is needed to preform model tasks."""
 import logging
-from typing import Tuple
+from typing import TYPE_CHECKING, Tuple
 
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 
-from app.prediction_server import Customer
+if TYPE_CHECKING:
+    from app.prediction_server import Customer
 
 logger = logging.getLogger("ml-tools")
 
@@ -24,6 +25,7 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def load_and_concatenate_data() -> pd.DataFrame:
+    """lods the data and joins them in a single data frame."""
     train, target = load_data()
     train["TARGET"] = target.values
     return train
@@ -54,7 +56,7 @@ def train_model(data: pd.DataFrame, target: pd.DataFrame) -> RandomForestClassif
     return random_forest
 
 
-def append_new_customer(customer: Customer):
+def append_new_customer(customer: Customer):  # pylint: disable=used-before-assignment
     """Appends the new customer to the existing dataset.
     The dictionary must have all the columns of the dataset.
     """
@@ -89,6 +91,7 @@ def get_customer(customer_id: int):
 
 
 def get_general_data_description():
+    """Gets general data statistics to produce explanatory graphs."""
     data = load_and_concatenate_data()
     cols_to_count = ["FLAG_OWN_CAR", "FLAG_OWN_REALTY", "CNT_CHILDREN"]
     all_approved = data[data.TARGET == 1]

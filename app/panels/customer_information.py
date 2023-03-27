@@ -1,6 +1,7 @@
 """This is the dashboard customer form module, contains all the fields necessary
 to obtain a risk prediction.
 """
+# pylint: disable=R0801
 import datetime
 import logging
 from dataclasses import asdict, dataclass
@@ -20,6 +21,7 @@ logger = logging.getLogger("ml-app")
 class Customer:
     """Representation of customer data handled on front."""
 
+    # pylint: disable=invalid-name, R0902
     SK_ID_CURR: float
     FLAG_OWN_CAR: float
     FLAG_OWN_REALTY: float
@@ -100,6 +102,7 @@ def days_birth() -> int:
     return -delta.days
 
 
+# pylint: disable=inconsistent-return-statements
 def dashboard() -> tuple[Optional[float], Customer]:
     """Main dashboard code"""
     customer_id = st.number_input("Client number", min_value=1000)

@@ -1,16 +1,17 @@
 """This is the prediction server that will prepare the request for the
 MlFlow server model prediction scheme.
 """
-# pylint: disable=no-name-in-module, too-few-public-methods
+# pylint: disable=no-name-in-module, too-few-public-methods, R0801
 
 import logging
 from logging.config import dictConfig
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from sklearn.ensemble import RandomForestClassifier
 
 from app import ml_tools
 from app.settings import log_conf
@@ -42,29 +43,30 @@ class Customer(BaseModel):
     TARGET: Optional[float] = np.nan
 
     def to_pandas(self):
+        """Transform class to pandas dataframe."""
         return pd.DataFrame(self.dict(), index=[0])
 
 
-MODEL = None
-customer: Optional[Customer] = None
+MODEL: Optional[RandomForestClassifier] = None
+CUSTOMER: Optional[Customer] = None
 
 
 def verify_model():
+    """Verifies model exists and is trained."""
     global MODEL
     if not MODEL:
         MODEL = ml_tools.train_and_return()
-    return MODEL
 
 
 def predict_risk(data: pd.DataFrame):
     """Makes a prediction from the imputed data."""
 
-    model = verify_model()
+    verify_model()
     data = ml_tools.prepare_predict_data(data)
 
     try:
         logger.info("Running predict function with data: %s", data)
-        prediction = model.predict_proba(data)
+        prediction = MODEL.predict_proba(data)
 
         return prediction[0][1]
 
@@ -75,26 +77,25 @@ def predict_risk(data: pd.DataFrame):
 @app.post("/make_prediction")
 async def calculate_risk(form_request: Customer):
     """Prepares data from user and gets a prediction."""
-    global customer
-    customer = form_request
-    logger.info("Running model with data: %s", customer.dict())
-    return predict_risk(customer.to_pandas())
+    global CUSTOMER
+    CUSTOMER = form_request
+    logger.info("Running model with data: %s", CUSTOMER.dict())
+    return predict_risk(CUSTOMER.to_pandas())
 
 
 @app.post("/decision/{target}")
 async def save_customer(target: bool):
     """Receives advisor decision and saves customer"""
-    global customer
 
-    if not customer:
-        raise HTTPException(400, "Cannot save if no prediction made")
+    if not CUSTOMER:
+        raise HTTPException(400, "Cannot save if no prediction was made")
 
-    customer.TARGET = target
+    CUSTOMER.TARGET = target
     try:
-        ml_tools.append_new_customer(customer)
+        ml_tools.append_new_customer(CUSTOMER)
     except ValueError as error:
         raise HTTPException(400, "Customer ID error") from error
-    logger.info("Customer saved , olk =;with data: %s", customer.dict())
+    logger.info("Customer saved , olk =;with data: %s", CUSTOMER.dict())
     return {"Status": "Customer was saved with current values"}
 
 
@@ -120,18 +121,19 @@ async def get_feature_importance():
         "INCOME_CREDIT_PERC",
         "PAYMENT_RATE",
     ]
-    model = verify_model()
+    verify_model()
     logger.info("Getting feature importances")
-    feature_importances = pd.DataFrame(
-        {"feature": features, "importance": model.feature_importances_}
+    feature_importance = pd.DataFrame(
+        {"feature": features, "importance": MODEL.feature_importances_}
     )
 
-    return feature_importances.to_json(orient="split")
+    return feature_importance.to_json(orient="split")
 
 
 @app.get("/get_accepted_description")
 async def get_accepted_description():
-    if not customer:
+    """Gets statistic data for customers with granted credits"""
+    if not CUSTOMER:
         raise HTTPException(
             400, "Customer data is not available yet, make a prediction first."
         )
@@ -140,6 +142,7 @@ async def get_accepted_description():
 
 @app.get("/get_customer/{customer_id}")
 async def get_customer(customer_id: int):
+    """Gets customer information if customer id is known."""
     logger.info("Getting customer data")
     data = ml_tools.get_customer(customer_id)
     logger.info("Replying with customer data: %s", data)

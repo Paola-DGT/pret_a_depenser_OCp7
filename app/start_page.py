@@ -7,17 +7,21 @@ import streamlit as st
 import yaml
 from streamlit_authenticator import Authenticate
 
+from app.panels.costumer_analysis import customer_analysis
+from app.panels.customer_information import dashboard
 from app.settings import conf, log_conf
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("front-app")
 
-ca_flag = False
-prediction = None
-customer = None
+CA_FLAG = False
+PREDICTION = None
+CUSTOMER = None
 
 
 def start():
+    """Start page for dashboard."""
+
     st.text(
         """Pret a depenser, offers you a clear, fast and adapted loan to your needs.
     Fill in the questionnaire and find out if you can benefit from a loan or
@@ -28,19 +32,15 @@ def start():
 
     # if st.button("Customer Info"):
     with cus_inf:
-        from panels.Customer_Information import dashboard
+        global PREDICTION, CUSTOMER
+        PREDICTION, CUSTOMER = dashboard() or (None, None)
 
-        global prediction, customer
-        prediction, customer = dashboard() or (None, None)
-
-        global ca_flag
-        ca_flag = True if prediction is not None else False
+        global CA_FLAG
+        CA_FLAG = PREDICTION is not None
 
     with cus_ana:
-        from panels.Costumer_Analysis import customer_analysis
-
-        if ca_flag:
-            customer_analysis(prediction, customer)
+        if CA_FLAG:
+            customer_analysis(PREDICTION, CUSTOMER)
 
 
 def load_auth() -> Authenticate:
