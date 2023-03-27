@@ -7,6 +7,7 @@ from app import ml_tools
 class TestMlTools:
     def test_train_and_predict(self):
         data_from_front = {
+            "SK_ID_CURR": 10003,
             "FLAG_OWN_CAR": 0,
             "FLAG_OWN_REALTY": 0,
             "CNT_CHILDREN": 0,
@@ -19,15 +20,16 @@ class TestMlTools:
             "INCOME_CREDIT_PERC": 1,
             "PAYMENT_RATE": 1,
             "AMT_ANNUITY": 1,
+            "TARGET": None,
         }
 
-        from app.prediction_server import FormRequest
+        from app.prediction_server import Customer
 
-        data = FormRequest(**data_from_front)
+        data = ml_tools.prepare_predict_data(Customer(**data_from_front).to_pandas())
 
         model = ml_tools.train_and_return()
-        predict_proba = model.predict_proba(pd.DataFrame(data.dict(), index=[0]))
-        predict = model.predict(pd.DataFrame(data.dict(), index=[0]))
+        predict_proba = model.predict_proba(data)
+        predict = model.predict(data)
         assert isinstance(model, RandomForestClassifier)
         assert (predict_proba == [0.6, 0.4]).all()
         assert predict[0] == 0
