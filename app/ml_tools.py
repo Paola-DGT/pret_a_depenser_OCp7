@@ -1,6 +1,8 @@
 """This module contains all that is needed to preform model tasks."""
+from __future__ import annotations
+
 import logging
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Tuple, Type
 
 import numpy as np
 import pandas as pd
@@ -86,8 +88,12 @@ def train_and_return() -> RandomForestClassifier:
 def get_customer(customer_id: int):
     """Gets à customer from SK_ID_CURR identification."""
     train = load_and_concatenate_data()
+
+    if customer_id not in train.SK_ID_CURR.values:
+        raise ValueError("Customer ID not found")
+
     customer_data = train[train.SK_ID_CURR == customer_id]
-    return customer_data.to_json(orient="split")
+    return customer_data.to_dict("r")
 
 
 def get_general_data_description():

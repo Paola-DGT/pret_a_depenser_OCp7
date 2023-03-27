@@ -1,7 +1,7 @@
 """This is the prediction server that will prepare the request for the
 MlFlow server model prediction scheme.
 """
-# pylint: disable=no-name-in-module, too-few-public-methods, R0801
+from __future__ import annotations
 
 import logging
 from logging.config import dictConfig
@@ -15,6 +15,9 @@ from sklearn.ensemble import RandomForestClassifier
 
 from app import ml_tools
 from app.settings import log_conf
+
+# pylint: disable=no-name-in-module, too-few-public-methods, R0801
+
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")
@@ -143,7 +146,11 @@ async def get_accepted_description():
 @app.get("/get_customer/{customer_id}")
 async def get_customer(customer_id: int):
     """Gets customer information if customer id is known."""
-    logger.info("Getting customer data")
-    data = ml_tools.get_customer(customer_id)
+    logger.info("Getting customer data for customer: %s", customer_id)
+    try:
+        data = ml_tools.get_customer(customer_id)
+    except ValueError as error:
+        raise HTTPException(400, "Client not found") from error
+
     logger.info("Replying with customer data: %s", data)
     return data

@@ -1,10 +1,12 @@
 """Module handling dashboard custommer comparison page and chart generation."""
+from __future__ import annotations
+
 # pylint: disable=R0801
 import json
 import logging
 from dataclasses import asdict
 from logging.config import dictConfig
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 import plotly.express as px
@@ -12,8 +14,10 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 
-from app.panels.customer_information import Customer
 from app.settings import conf, log_conf
+
+if TYPE_CHECKING:
+    from app.panels.customer_information import Customer
 
 dictConfig(log_conf.dict())
 logger = logging.getLogger("front-app")

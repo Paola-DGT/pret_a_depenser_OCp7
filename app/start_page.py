@@ -1,4 +1,5 @@
 """Dashboard start page to handle sub pages"""
+from __future__ import annotations
 
 import logging
 from logging.config import dictConfig
