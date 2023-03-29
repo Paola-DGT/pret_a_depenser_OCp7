@@ -5,7 +5,7 @@ credentials:
       password: "$2b$12$opegMo0i5pmkHMMtZ6hPTuzjJdtPII8.4r.3Ur7a5WtxMsEMnZAuu"
     openclassrooms:
       name: "openclassrooms"
-      password: "$2b$12$gcFu4Fz9lmc6mT39IYkzguhp6DcFIq5TGJymwPVCU/66adowKVXoS"
+      password: "$2b$12$t/DMH18FWV5uCnTAGActJ.APCji5Wz3kNe.98UslDqVa72rKLJCZi"
 cookie:
   expiry_days: 1
   key: "sldfmlkfoijadnmlqsvmlqjglkjgmlkjgmqlkjv" # whatever hash like value for the auth token
