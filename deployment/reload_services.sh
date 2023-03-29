@@ -37,7 +37,7 @@ echo "App Unit files from $deploy_root_path/ were copied to $systemd_path/"
 echo "Re-installing virtual environements"
 
 for venv in "${venvs[@]}"; do
-    /volume/$venv/bin/python -m pip install --force-reinstall -e $app_root_path/. || exit 1
+    /volume/$venv/bin/python -m pip install -e $app_root_path/. || exit 1
 done
 
 echo "Virtual environements succesfully installed !"
