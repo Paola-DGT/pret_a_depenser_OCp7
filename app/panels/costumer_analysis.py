@@ -27,15 +27,15 @@ def pred_text(score: float) -> str:  # pylint: disable=inconsistent-return-state
     """Helper to set the score text."""
 
     if score < 0.3:
-        return f"{score} which is very high risk BE CAREFUL !"
+        return f"{score} which is very low risk, proceed without problems"
     if 0.3 <= score <= 0.5:
-        return f"{score} which is high risk CAUTION, Reconsider"
+        return f"{score} which is low risk, proceed carefully"
     if 0.5 < score < 0.6:
         return f"{score} which is medium risk, be precautious"
     if 0.6 < score <= 0.8:
-        return f"{score} which is low risk, proceed carefully"
+        return f"{score} which is high risk CAUTION, Reconsider"
     if 0.8 < score <= 1:
-        return f"{score} which is very low risk, proceed without problems"
+        return f"{score} which is very high risk BE CAREFUL !"
 
 
 def display_importances(feature_importance_df: pd.DataFrame) -> None:
