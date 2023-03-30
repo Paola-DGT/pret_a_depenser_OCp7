@@ -100,7 +100,7 @@ def get_general_data_description():
     """Gets general data statistics to produce explanatory graphs."""
     data = load_and_concatenate_data()
     cols_to_count = ["FLAG_OWN_CAR", "FLAG_OWN_REALTY", "CNT_CHILDREN"]
-    all_approved = data[data.TARGET == 1]
+    all_approved = data[data.TARGET == 0]
     all_app_big = all_approved.drop(
         cols_to_count + ["SK_ID_CURR", "TARGET"], axis=1
     ).describe()
