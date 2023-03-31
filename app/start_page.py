@@ -8,7 +8,7 @@ import streamlit as st
 import yaml
 from streamlit_authenticator import Authenticate
 
-from app.panels.costumer_analysis import customer_analysis
+from app.panels.customer_analysis import customer_analysis
 from app.panels.customer_information import dashboard
 from app.settings import conf, log_conf
 

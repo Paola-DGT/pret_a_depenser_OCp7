@@ -1,4 +1,4 @@
-"""Module handling dashboard custommer comparison page and chart generation."""
+"""Module handling dashboard customer comparison page and chart generation."""
 from __future__ import annotations
 
 # pylint: disable=R0801
