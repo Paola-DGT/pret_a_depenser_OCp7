@@ -59,7 +59,7 @@ def work_percentage(days_b: int):
         "Years worked", value=1, min_value=1, help=CAP4_HELP
     )
     working_days = working_years * 365
-    percentage = abs(days_b) / working_days
+    percentage = working_days / abs(days_b)
     return percentage
 
 

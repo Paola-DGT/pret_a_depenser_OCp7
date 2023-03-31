@@ -30,7 +30,7 @@ def pred_text(score: float) -> str:  # pylint: disable=inconsistent-return-state
         return f"{score} which is very low risk, proceed without problems"
     if 0.3 <= score <= 0.5:
         return f"{score} which is low risk, proceed carefully"
-    if 0.5 < score < 0.6:
+    if 0.5 < score <= 0.6:
         return f"{score} which is medium risk, be precautious"
     if 0.6 < score <= 0.8:
         return f"{score} which is high risk CAUTION, Reconsider"
