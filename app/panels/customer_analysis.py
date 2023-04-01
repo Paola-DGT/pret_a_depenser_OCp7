@@ -50,6 +50,7 @@ def display_importances(feature_importance_df: pd.DataFrame) -> None:
     )
 
     figure = px.bar(feature_importance_df, x="feature", y="importance")
+    figure.update_layout(title_text="Feature importance on model (from all clients)")
     st.plotly_chart(figure)
 
 
