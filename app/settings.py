@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # On deploier les services dashboard et backend sur la meme instance sur le cloud,
     #   en consequence, les services sont en local host DE L' INSTANCE CLOUD!, puis
     #   Nginx est configuré en reverse proxy pour redirectioner le domain en https sur
-    #   le port du dashboard. 
+    #   le port du dashboard.
     PREDICTION_ENDPOINT: str = "http://localhost:8088/make_prediction"
     GET_FI_ENDPOINT: str = "http://localhost:8088/get_feature_importance"
     GET_CUSTOMER: str = "http://localhost:8088/get_customer"
