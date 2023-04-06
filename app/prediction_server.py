@@ -17,7 +17,7 @@ from app.settings import log_conf
 dictConfig(log_conf.dict())
 logger = logging.getLogger("ml-app")
 
-app = FastAPI(debug=True)
+app = FastAPI(debug=True, title="Risk assessment API")
 
 
 class Customer(BaseModel):

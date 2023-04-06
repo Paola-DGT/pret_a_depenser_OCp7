@@ -10,16 +10,19 @@ class Settings(BaseSettings):
     Modify this settings to match your requirements, if values are not given here it
     will look for the values on local environment variables.
     """
+
     # On deploier les services dashboard et backend sur la meme instance sur le cloud,
     #   en consequence, les services sont en local host DE L' INSTANCE CLOUD!, puis
     #   Nginx est configuré en reverse proxy pour redirectioner le domain en https sur
     #   le port du dashboard.
-    PREDICTION_ENDPOINT: str = "http://localhost:8088/make_prediction"
-    GET_FI_ENDPOINT: str = "http://localhost:8088/get_feature_importance"
-    GET_CUSTOMER: str = "http://localhost:8088/get_customer"
-    GET_ACCEPTED_DESC_ENDPOINT: str = "http://localhost:8088/get_accepted_description"
-    TRAINING_ENDPOINT: str = "http://localhost:8088/train_model"
-    SAVE_DECISION_ENDPOINT: str = "http://localhost:8088/decision"
+    PREDICTION_ENDPOINT: str = "https://pao-app.online/api/make_prediction"
+    GET_FI_ENDPOINT: str = "https://pao-app.online/api/get_feature_importance"
+    GET_CUSTOMER: str = "https://pao-app.online/api/get_customer"
+    GET_ACCEPTED_DESC_ENDPOINT: str = (
+        "https://pao-app.online/api/get_accepted_description"
+    )
+    TRAINING_ENDPOINT: str = "https://pao-app.online/api/train_model"
+    SAVE_DECISION_ENDPOINT: str = "https://pao-app.online/api/decision"
     AUTH_FILE_PATH: str = "auth_config.yaml"
 
 
