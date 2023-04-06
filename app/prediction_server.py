@@ -6,7 +6,6 @@ import logging
 from logging.config import dictConfig
 from typing import Optional
 
-import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -39,7 +38,7 @@ class Customer(BaseModel):
     DAYS_EMPLOYED_PERC: float
     INCOME_CREDIT_PERC: float
     PAYMENT_RATE: float
-    TARGET: Optional[float] = np.nan
+    TARGET: Optional[float] = None
 
     def to_pandas(self):
         """Transform class to pandas dataframe."""
